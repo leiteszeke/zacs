@@ -341,10 +341,12 @@ const builtinElements = {
   web: {
     view: 'div',
     text: 'span',
+    image: 'img',
   },
   native: {
     view: 'ZACS_RN_View',
     text: 'ZACS_RN_Text',
+    image: 'ZACS_RN_Image',
   },
 }
 
@@ -355,7 +357,7 @@ function getElementName(t, platform, path, component) {
     t.isMemberExpression(component) &&
     t.isIdentifier(component.object, { name: 'zacs' }) &&
     t.isIdentifier(component.property) &&
-    ['text', 'view'].includes(component.property.name)
+    ['text', 'view', 'image'].includes(component.property.name)
   ) {
     return builtinElements[platform][component.property.name]
   } else if (t.isIdentifier(component)) {
@@ -392,6 +394,7 @@ function forwardRef(t, component) {
 const createMethodToZacsMethod = {
   createView: 'view',
   createText: 'text',
+  createImage: 'image',
   createStyled: 'styled',
 }
 
@@ -493,7 +496,16 @@ function validateZacsDeclaration(t, path) {
 
   // Validate declaration
   if (
-    !['text', 'view', 'styled', 'createText', 'createView', 'createStyled'].includes(zacsMethod)
+    ![
+      'text',
+      'view',
+      'styled',
+      'image',
+      'createText',
+      'createView',
+      'createStyled',
+      'createImage',
+    ].includes(zacsMethod)
   ) {
     throw path.buildCodeFrameError(
       `zacs.${init.callee.property.name} is not a valid zacs declaration`,
@@ -505,7 +517,7 @@ function validateZacsDeclaration(t, path) {
     // declarator -> declaration -> export declaration
     if (t.isExportDeclaration(path.parentPath.parent)) {
       throw path.buildCodeFrameError(
-        `It's not allowed to export zacs declarations -- but you can export zacs components (use zacs.createView/createText/createStyled)`,
+        `It's not allowed to export zacs declarations -- but you can export zacs components (use zacs.createView/createText/createStyled/createImage)`,
       )
     }
   }
@@ -556,12 +568,12 @@ function validateElementHasNoIllegalAttributes(t, path) {
   const { attributes } = openingElement
   if (hasAttrNamed(t, 'style', attributes)) {
     throw path.buildCodeFrameError(
-      'It\'s not allowed to pass `style` attribute to ZACS-styled components',
+      "It's not allowed to pass `style` attribute to ZACS-styled components",
     )
   }
   if (hasAttrNamed(t, 'className', attributes)) {
     throw path.buildCodeFrameError(
-      'It\'s not allowed to pass `className` attribute to ZACS-styled components',
+      "It's not allowed to pass `className` attribute to ZACS-styled components",
     )
   }
 }
@@ -709,6 +721,11 @@ exports.default = function(babel) {
 
             if (state.get('uses_rn_text')) {
               const makeZacsElement = babel.template(`const ZACS_RN_Text = zacsReactNative.Text`)
+              zacsRN.insertAfter(makeZacsElement())
+            }
+
+            if (state.get('uses_rn_image')) {
+              const makeZacsElement = babel.template(`const ZACS_RN_Image = zacsReactNative.Image`)
               zacsRN.insertAfter(makeZacsElement())
             }
           }

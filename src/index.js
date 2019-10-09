@@ -17,7 +17,9 @@ module.exports = {
   view: displayZacsError('view'),
   text: displayZacsError('text'),
   styled: displayZacsError('styled'),
+  image: displayZacsError('image'),
   createView: displayZacsError('createView'),
   createText: displayZacsError('createText'),
   createStyled: displayZacsError('createStyled'),
+  createImage: displayZacsError('createImage'),
 }

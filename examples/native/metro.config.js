@@ -5,6 +5,8 @@
  * @format
  */
 
+const path = require('path');
+
 module.exports = {
   transformer: {
     getTransformOptions: async () => ({
@@ -13,5 +15,10 @@ module.exports = {
         inlineRequires: false,
       },
     }),
+  },
+  resolver: {
+    extraNodeModules: {
+      zacs: path.resolve(__dirname, 'node_modules/@nozbe/zacs'),
+    },
   },
 };

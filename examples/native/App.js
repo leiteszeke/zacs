@@ -7,24 +7,11 @@
  */
 
 import React, {Fragment} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, ScrollView, StatusBar} from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {Header, Colors} from 'react-native/Libraries/NewAppScreen';
 
-import zacs from '@nozbe/zacs';
+import zacs from 'zacs';
 
 const styles = StyleSheet.create({
   scrollView: {
@@ -65,13 +52,9 @@ const styles = StyleSheet.create({
   },
 });
 
+console.log(zacs);
+
 const Engine = zacs.view(styles.engine);
-const Footer = zacs.view(styles.footer);
-const Body = zacs.view(styles.body);
-const SectionContainer = zacs.view(styles.sectionContainer);
-const SectionTitle = zacs.text(styles.sectionTitle);
-const SectionDescription = zacs.text(styles.sectionDescription);
-const Highlight = zacs.text(styles.highlight);
 
 const App = () => {
   return (
@@ -82,38 +65,7 @@ const App = () => {
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
           <Header />
-          {global.HermesInternal == null ? null : (
-            <Engine>
-              <Footer>Engine: Hermes</Footer>
-            </Engine>
-          )}
-          <Body>
-            <SectionContainer>
-              <SectionTitle>Step One</SectionTitle>
-              <SectionDescription>
-                Edit <Highlight>App.js</Highlight> to change this screen and
-                then come back to see your edits.
-              </SectionDescription>
-            </SectionContainer>
-            <SectionContainer>
-              <SectionTitle>See Your Changes</SectionTitle>
-              <SectionDescription>
-                <ReloadInstructions />
-              </SectionDescription>
-            </SectionContainer>
-            <SectionContainer>
-              <SectionTitle>Debug</SectionTitle>
-              <SectionDescription>
-                <DebugInstructions />
-              </SectionDescription>
-            </SectionContainer>
-            <SectionContainer>
-              <SectionTitle>Learn More</SectionTitle>
-              <SectionDescription>
-                Read the docs to discover what to do next:
-              </SectionDescription>
-            </SectionContainer>
-          </Body>
+          <Engine />
         </ScrollView>
       </SafeAreaView>
     </Fragment>
